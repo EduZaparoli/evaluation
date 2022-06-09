@@ -1,5 +1,5 @@
 import Sequelize from "sequelize";
-import db from "./config/dbConnect.js";
+import db from "../config/dbConnect.js";
 
 const person = db.define('person', {
     ID: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true, allowNull: false},
@@ -9,3 +9,5 @@ const person = db.define('person', {
     JOB: {type: Sequelize.STRING},
     DEPARTMENT_ID: {type: Sequelize.INTEGER, foreignkey: true}
 })
+
+export default person;
