@@ -1,11 +1,16 @@
 import Sequelize from "sequelize";
-import db from "./config/dbConnect.js";
+import db from "../config/dbConnect.js";
 
-const person = db.define('person', {
-    ID: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true, allowNull: false},
-    NAME: {type: Sequelize.STRING, allowNull: false},
-    BIRTH_DATE: {type: Sequelize.DATE, allowNull: false},
-    BIRTH_PLACE: {type: Sequelize.STRING, allowNull: false},
-    JOB: {type: Sequelize.STRING},
-    DEPARTMENT_ID: {type: Sequelize.INTEGER, foreignkey: true}
+const persons = db.define('person', {
+    id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
+    name: {type: Sequelize.STRING},
+    birth_date: {type: Sequelize.DATE},
+    birth_place: {type: Sequelize.STRING},
+    job: {type: Sequelize.STRING},
+    department_id: {type: Sequelize.INTEGER}
+}, {
+    timestamps: false,
+    tableName: 'person'
 })
+
+export default persons;
