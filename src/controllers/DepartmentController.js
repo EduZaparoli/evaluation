@@ -2,60 +2,76 @@ import department from "../models/Department.js"
 
 class DepartmentController{
 
-    static createDepartment = (req, res)=>{
-        let departmen = new department(req.body); 
-
-        departmen.save((err) => {
-            if (err){
-                res.status(500).send({message: `${err.message} - Não foi possivel cadastrar o departamento.`})
-            }else { 
-                res.status(201).send(department.toJSON())
-            }
-        })
+    static createDepartment = async (req, res)=>{
+        const departments = await department.create(req.body);
+        res.status(200).send({department})
     } 
 
-    static updateDepartment = (req,res) => {
-        const id = req.params.id; 
+    static updateDepartment = async (req,res) => {
+        const { name, address } = req.body;
 
-        department.findByIdAndUpdate(id, {$set: req.body}, (err) =>{
-            if (err){
-                res.status(500).send({message: err.message})
-            } else {
-                res.status(200).send({message: 'Departamento atualizado com sucesso'})
+        await department.update(
+            { name, address },
+            {
+                where: {id: req.params.id}
             }
+        )
+
+        res.status(200).send({message: "Department Updated!"})
+    }
+
+    static deleteDepartment = async (req, res) => {
+        await department.destroy({where: {'id': req.params.id}
+        }).then(function(){
+            res.status(200).send({message: "Department deleted!"})
+        }).catch(function(erro){
+            res.status(500).send({message: erro})
+        })
+    
+    }
+
+    static showDepartment = async (req, res) =>{
+        await department.findAll()
+        .then((departments) => {
+            res.status(200).json(departments);
+        }).catch(() => {
+            res.status(400).send({message: "Erro ao pesquisar!"})
         })
     }
 
-    static deleteDepartment = (req, res) => {
-        const id = req.params.id;
 
-        department.findByIdAndDelete(id, (err) => {
-            if (err){
-                res.status(500).send({message: err.message})
-            } else {
-                res.status(200).send({message: 'Departamento excluido com sucesso'})
-            }
-        })
-    }
+    static showDepartmentName = async (req, res) =>{
+        const { name } = req.params
 
-    static showDepartment = (req, res) =>{
+        const departmentName = await department.findById(id)
+        req.status(200).json(departmentName)
 
-        department.find((err, department) =>{
-            res.status(200).json(department)
-        })
-
-    }
-
-
-
-    static showDepartmentName = (req, res) =>{
-        const name = req.query.name
-
-        department.find ({'name' : name}, {}, (err, department) =>{
+        await department.findAll ({'name' : name}, {}, (err, department) =>{
             res.status(200).send(department); 
         })
     }
 
+    static showDepartmentAddress = (req,res) => {
+        const { address } = req.params
+
+        const departmentAddress = await department.findById(id)
+        req.status(200).json(departmentAddress)
+
+        await department.findAll ({'address' : address}, {}, (err, department) =>{
+            res.status(200).send(department); 
+        })
+    }
+
+    static showDepartmentId = (req, res) => {
+        const { id } = req.params
+
+        const departmentid = await department.findById(id)
+        req.status(200).json(departmentid)
+
+        await department.findAll ({'Id' : id}, {}, (err, department) =>{
+            res.status(200).send(department); 
+        })
+    }
 
 }
 
