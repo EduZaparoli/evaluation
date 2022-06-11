@@ -52,15 +52,9 @@ class PersonController{
     }
 
     static showPersonId = async (req, res) =>{
-        const { id } = req.params
-
-        const persons = await person.findById(id)
-        req.status(200).json(persons)
-
-        await person.findAll ({'Id' : id}, {}, (err, person) =>{
-        res.status(200).send(person); 
-
-        })
+        const { id } = req.params;
+        const persons = await person.findByPk(id)
+        res.status(200).json(persons)
     }
 
     static showPersonJob = async (req, res) =>{

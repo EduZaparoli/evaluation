@@ -63,14 +63,9 @@ class DepartmentController{
     }
 
     static showDepartmentId = (req, res) => {
-        const { id } = req.params
-
-        const departmentid = await department.findById(id)
-        req.status(200).json(departmentid)
-
-        await department.findAll ({'Id' : id}, {}, (err, department) =>{
-            res.status(200).send(department); 
-        })
+        const { id } = req.params;
+        const departments = await department.findByPk(id)
+        res.status(200).json(departments)
     }
 
 }
