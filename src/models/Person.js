@@ -7,7 +7,7 @@ const persons = db.define('person', {
     birth_date: {type: Sequelize.DATE},
     birth_place: {type: Sequelize.STRING},
     job: {type: Sequelize.STRING},
-    department_id: {type: Sequelize.INTEGER}
+    department_id: {type: Sequelize.INTEGER, references: {model: 'department', key: 'id'}}
 }, {
     timestamps: false,
     tableName: 'person'
