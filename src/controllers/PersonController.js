@@ -32,29 +32,33 @@ class PersonController{
 
     static showPerson = async (req, res) =>{
         if(req.query.name!=null){
+            const limit = parseInt(req.query.limit);
             await persons.findAll(
-                {where : {"name": req.query.name}}
+                {where : {"name": req.query.name}, offset: 0, limit: limit}
             ).then((persons) => {
                 res.status(200).json(persons);
             }).catch(() => {
-                res.status(400).send({message: "Erro ao pesquisar!"});
+                res.status(400).send({message: "Error when searching!"});
             })
         }
         else if(req.query.job!=null){
+            const limit = parseInt(req.query.limit);
             await persons.findAll(
-                {where : {"job": req.query.job}}
+                {where : {"job": req.query.job}, offset: 0, limit: limit}
             ).then((persons) => {
                 res.status(200).json(persons);
             }).catch(() => {
-                res.status(400).send({message: "Erro ao pesquisar!"});
+                res.status(400).send({message: "Error when searching!"});
             })
         }
         else{
-            await persons.findAll()
-            .then((persons) => {
+            const limit = parseInt(req.query.limit);
+            await persons.findAll(
+                {offset: 0, limit: limit}
+            ).then((persons) => {
                 res.status(200).json(persons);
             }).catch(() => {
-                res.status(400).send({message: "Erro ao pesquisar!"});
+                res.status(400).send({message: "Error when searching!"});
             })
         }
     }

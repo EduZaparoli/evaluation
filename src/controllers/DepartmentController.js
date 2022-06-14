@@ -32,29 +32,33 @@ class DepartmentController{
 
     static showDepartment = async (req, res) =>{
         if(req.query.name!=null){
+            const limit = parseInt(req.query.limit);
             await departments.findAll(
-                {where : {"name": req.query.name}}
+                {where : {"name": req.query.name}, offset: 0, limit: limit}
             ).then((departments) => {
                 res.status(200).json(departments);
             }).catch(() => {
-                res.status(400).send({message: "Erro ao pesquisar!"});
+                res.status(400).send({message: "Error when searching!"});
             })
         }
         else if(req.query.address!=null){
+            const limit = parseInt(req.query.limit);
             await departments.findAll(
-                {where : {"address": req.query.address}}
+                {where : {"address": req.query.address}, offset: 0, limit: limit}
             ).then((department) => {
                 res.status(200).json(department);
             }).catch(() => {
-                res.status(400).send({message: "Erro ao pesquisar!"});
+                res.status(400).send({message: "Error when searching!"});
             })
         }
         else{
-            await departments.findAll()
-            .then((departments) => {
+            const limit = parseInt(req.query.limit);
+            await departments.findAll(
+                {offset: 0, limit: limit}
+            ).then((departments) => {
                 res.status(200).json(departments);
             }).catch(() => {
-                res.status(400).send({message: "Erro ao pesquisar!"})
+                res.status(400).send({message: "Error when searching!"})
             })
         }
     }
