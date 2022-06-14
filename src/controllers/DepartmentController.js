@@ -31,20 +31,32 @@ class DepartmentController{
     }
 
     static showDepartment = async (req, res) =>{
-        await departments.findAll()
-        .then((departments) => {
-            res.status(200).json(departments);
-        }).catch(() => {
-            res.status(400).send({message: "Erro ao pesquisar!"})
-        })
-    }
-
-    static showDepartmentName = async (req, res) =>{
-
-    }
-
-    static showDepartmentAddress = (req,res) => {
-
+        if(req.query.name!=null){
+            await departments.findAll(
+                {where : {"name": req.query.name}}
+            ).then((departments) => {
+                res.status(200).json(departments);
+            }).catch(() => {
+                res.status(400).send({message: "Erro ao pesquisar!"});
+            })
+        }
+        else if(req.query.address!=null){
+            await departments.findAll(
+                {where : {"address": req.query.address}}
+            ).then((department) => {
+                res.status(200).json(department);
+            }).catch(() => {
+                res.status(400).send({message: "Erro ao pesquisar!"});
+            })
+        }
+        else{
+            await departments.findAll()
+            .then((departments) => {
+                res.status(200).json(departments);
+            }).catch(() => {
+                res.status(400).send({message: "Erro ao pesquisar!"})
+            })
+        }
     }
 
     static showDepartmentId = async (req, res) => {
