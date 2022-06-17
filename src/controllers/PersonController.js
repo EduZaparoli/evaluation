@@ -4,7 +4,11 @@ class PersonController{
 
     static createPerson = async (req, res)=>{
         const person = await persons.create(req.body);
-        res.status(200).send({person})
+        if(person){
+            res.status(200).send({person})
+        }else{
+            res.status(500).send({message: "Failed to register!"})
+        }  
     } 
 
     static updatePerson = async (req,res) => {
@@ -16,16 +20,19 @@ class PersonController{
                 where: {id: req.params.id}
             }
         )
-
-        res.status(200).send({message: "Person Updated!"})
+        if(persons){
+            res.status(200).send({message: "Person Updated!"})
+        }else{
+            res.status(500).send({message: "Failed to update!"})
+        }
     }
 
     static deletePerson = async (req, res) => {
         await persons.destroy({where: {'id': req.params.id}
         }).then(function(){
             res.status(200).send({message: "Person deleted!"})
-        }).catch(function(erro){
-            res.status(500).send({message: erro})
+        }).catch(function(){
+            res.status(500).send({message: "Failed to delete!"})
         })
     
     }
@@ -36,9 +43,13 @@ class PersonController{
             await persons.findAll(
                 {where : {"name": req.query.name}, offset: 0, limit: limit}
             ).then((persons) => {
-                res.status(200).json(persons);
+                if(persons.length<=0){
+                    res.status(400).send({message: "Not found!"})
+                }else{
+                    res.status(200).json(persons);
+                }
             }).catch(() => {
-                res.status(400).send({message: "Error when searching!"});
+                res.status(500).send({message: "Error when searching!"});
             })
         }
         else if(req.query.job!=null){
@@ -46,9 +57,13 @@ class PersonController{
             await persons.findAll(
                 {where : {"job": req.query.job}, offset: 0, limit: limit}
             ).then((persons) => {
-                res.status(200).json(persons);
+                if(persons.length<=0){
+                    res.status(400).send({message: "Not found!"})
+                }else{
+                    res.status(200).json(persons);
+                }
             }).catch(() => {
-                res.status(400).send({message: "Error when searching!"});
+                res.status(500).send({message: "Error when searching!"});
             })
         }
         else{
@@ -58,7 +73,7 @@ class PersonController{
             ).then((persons) => {
                 res.status(200).json(persons);
             }).catch(() => {
-                res.status(400).send({message: "Error when searching!"});
+                res.status(500).send({message: "Error when searching!"});
             })
         }
     }
@@ -66,7 +81,11 @@ class PersonController{
     static showPersonId = async (req, res) =>{
         const { id } = req.params;
         const person = await persons.findByPk(id)
-        res.status(200).json(person)
+        if(person){
+            res.status(200).json(person)
+        }else{
+            res.status(400).send({message: "Not found!"})
+        }
     }
 
 }
